@@ -1,5 +1,14 @@
-const BUILD_TIME_BASE =
-  (import.meta.env.VITE_API_URL as string | undefined)?.replace(/\/$/, '') ?? '';
+function normalizeApiBase(raw: string): string {
+  let base = raw.trim().replace(/\/$/, '');
+  if (base.endsWith('/health')) {
+    base = base.slice(0, -'/health'.length).replace(/\/$/, '');
+  }
+  return base;
+}
+
+const BUILD_TIME_BASE = (import.meta.env.VITE_API_URL as string | undefined)
+  ? normalizeApiBase(import.meta.env.VITE_API_URL as string)
+  : '';
 
 const SESSION_KEY = 'ms-global-api-base';
 
@@ -9,11 +18,11 @@ export function getApiBase(): string {
   if (typeof window !== 'undefined') {
     const fromQuery = new URLSearchParams(window.location.search).get('apiBase');
     if (fromQuery) {
-      return decodeURIComponent(fromQuery).replace(/\/$/, '');
+      return normalizeApiBase(decodeURIComponent(fromQuery));
     }
     try {
       const stored = sessionStorage.getItem(SESSION_KEY);
-      if (stored) return stored.replace(/\/$/, '');
+      if (stored) return normalizeApiBase(stored);
     } catch {
       /* ignore */
     }
@@ -27,7 +36,7 @@ export function persistApiBaseFromQuery(): void {
   const raw = new URLSearchParams(window.location.search).get('apiBase');
   if (!raw) return;
   try {
-    sessionStorage.setItem(SESSION_KEY, decodeURIComponent(raw).replace(/\/$/, ''));
+    sessionStorage.setItem(SESSION_KEY, normalizeApiBase(decodeURIComponent(raw)));
   } catch {
     /* ignore */
   }
