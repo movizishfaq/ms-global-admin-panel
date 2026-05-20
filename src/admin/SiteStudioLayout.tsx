@@ -138,7 +138,11 @@ export function SiteStudioLayout({
     () => (typeof window !== 'undefined' ? window.location.origin : ''),
     []
   );
-  const src = `${publicOrigin}${previewPath}?siteStudio=1&studioDraft=1&studioParent=${encodeURIComponent(studioOrigin)}&r=${iframeKey}`;
+  const apiBase = (
+    import.meta.env.VITE_API_URL as string | undefined
+  )?.replace(/\/$/, '');
+  const apiQuery = apiBase ? `&apiBase=${encodeURIComponent(apiBase)}` : '';
+  const src = `${publicOrigin}${previewPath}?siteStudio=1&studioDraft=1&studioParent=${encodeURIComponent(studioOrigin)}${apiQuery}&r=${iframeKey}`;
 
   useEffect(() => {
     const onMsg = (ev: MessageEvent) => {

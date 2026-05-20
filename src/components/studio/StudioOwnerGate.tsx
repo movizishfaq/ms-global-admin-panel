@@ -90,9 +90,15 @@ function StudioAdminSignIn({
       }
       onSuccess({ token, user: apiUserToStored(user) });
     } catch (err) {
-      setError(
-        err instanceof Error ? err.message.toUpperCase() : 'SIGN IN FAILED.'
-      );
+      const msg =
+        err instanceof Error ? err.message : 'Sign in failed.';
+      if (msg.toLowerCase().includes('failed to fetch')) {
+        setError(
+          'CANNOT REACH API. SET VITE_API_URL ON VERCEL AND ADD STUDIO URL TO API CORS_ORIGINS.'
+        );
+      } else {
+        setError(msg.toUpperCase());
+      }
     } finally {
       setLoading(false);
     }

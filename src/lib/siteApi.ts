@@ -1,16 +1,26 @@
 import type { SiteDraftBundle } from './siteSnapshot';
 import { getStoredToken } from './authStorage';
-
-const API_BASE = import.meta.env.VITE_API_URL ?? '';
+import { getApiBase, missingApiBaseMessage } from './apiBase';
 
 async function request<T>(path: string, options: RequestInit = {}): Promise<T> {
-  const res = await fetch(`${API_BASE}${path}`, {
-    ...options,
-    headers: {
-      'Content-Type': 'application/json',
-      ...(options.headers as Record<string, string> | undefined)
-    }
-  });
+  const API_BASE = getApiBase();
+  if (!API_BASE) {
+    throw new Error(missingApiBaseMessage());
+  }
+  let res: Response;
+  try {
+    res = await fetch(`${API_BASE}${path}`, {
+      ...options,
+      headers: {
+        'Content-Type': 'application/json',
+        ...(options.headers as Record<string, string> | undefined)
+      }
+    });
+  } catch {
+    throw new Error(
+      'Cannot reach API. Set VITE_API_URL on Vercel and allow your site URL in API CORS_ORIGINS.'
+    );
+  }
   const data = (await res.json().catch(() => ({}))) as {
     error?: { message?: string };
   } & T;

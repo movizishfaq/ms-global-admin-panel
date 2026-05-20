@@ -14,6 +14,7 @@ import {
   setStoredToken,
   type StoredAuthUser
 } from './lib/authStorage';
+import { persistApiBaseFromQuery } from './lib/apiBase';
 import { captureReferralFromUrl } from './lib/referral';
 import { getAppMode, isStudioMode } from './lib/appMode';
 import { Header } from './components/Header';
@@ -172,6 +173,7 @@ export function App() {
   const [authLoading, setAuthLoading] = useState(true);
 
   useEffect(() => {
+    persistApiBaseFromQuery();
     captureReferralFromUrl();
   }, []);
 

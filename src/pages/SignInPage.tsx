@@ -9,6 +9,8 @@ import {
   clearStoredReferralCode,
   getStoredReferralCode
 } from '../lib/referral';
+import { useStudioPreviewMode } from '../hooks/useStudioPreviewMode';
+import { apiBaseConfigured, missingApiBaseMessage } from '../lib/apiBase';
 type View = 'signin' | 'signup' | 'forgot';
 const PRIMARY = '#9E055F';
 const DARK = '#7a0449';
@@ -16,12 +18,19 @@ export function SignInPage() {
   const [view, setView] = useState<View>('signin');
   const navigate = useNavigate();
   const { signIn } = useAuth();
+  const studioPreview = useStudioPreviewMode();
   return (
     <div
       className="w-full min-h-screen flex flex-col"
       style={{
         backgroundColor: PRIMARY
       }}>
+
+      {studioPreview && !apiBaseConfigured() ? (
+        <p className="relative z-10 font-mono text-[10px] text-center text-white/90 bg-black/40 px-4 py-2">
+          {missingApiBaseMessage()}
+        </p>
+      ) : null}
 
       {/* Background texture */}
       <div className="fixed inset-0 pointer-events-none" aria-hidden="true">
