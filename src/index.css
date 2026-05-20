@@ -1,0 +1,31 @@
+/* @import url() FONT IMPORTS MUST ALWAYS BE AT THE VERY TOP OF THIS FILE, ABOVE THE TAILWIND IMPORTS — DO NOT DELETE THIS COMMENT */
+@import url('https://fonts.googleapis.com/css2?family=Anton&family=Space+Mono:ital,wght@0,400;0,700;1,400&family=Inter:wght@300;400;500;600;700&display=swap');
+
+/* CRITICAL: THE FOLLOWING TAILWIND IMPORTS MUST NEVER BE DELETED OR REORDERED — DO NOT DELETE THIS COMMENT */
+@import 'tailwindcss/base';
+@import 'tailwindcss/components';
+@import 'tailwindcss/utilities';
+
+/* END TAILWIND IMPORTS — ALL OTHER CSS MUST GO BELOW THIS LINE */
+
+:root {
+  --primary: #9E055F;
+  --dark: #7a0449;
+  --red: #FF0000;
+  --white: #FFFFFF;
+}
+.font-anton { font-family: 'Anton', sans-serif; }
+.font-mono { font-family: 'Space Mono', monospace; }
+.font-inter { font-family: 'Inter', sans-serif; }
+body {
+  font-family: 'Inter', sans-serif;
+  background-color: var(--primary);
+}
+.scrollbar-hide::-webkit-scrollbar { display: none; }
+.scrollbar-hide { -ms-overflow-style: none; scrollbar-width: none; }
+.text-red { color: #FF0000; }
+.bg-red { background-color: #FF0000; }
+.border-red { border-color: #FF0000; }
+.hover\:bg-red:hover { background-color: #FF0000; }
+.hover\:text-red:hover { color: #FF0000; }
+.hover\:border-red:hover { border-color: #FF0000; }
