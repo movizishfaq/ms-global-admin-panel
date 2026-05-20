@@ -25,6 +25,11 @@ async function request<T>(path: string, options: RequestInit = {}): Promise<T> {
     error?: { message?: string };
   } & T;
   if (!res.ok) {
+    if (res.status === 405) {
+      throw new Error(
+        'HTTP 405: API URL points at the static site. Use your ms-global-server Vercel URL for VITE_API_URL.'
+      );
+    }
     throw new Error(data.error?.message ?? res.statusText ?? 'Request failed');
   }
   return data;

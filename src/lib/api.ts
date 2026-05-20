@@ -37,6 +37,11 @@ async function request<T>(path: string, options: RequestInit = {}): Promise<T> {
     error?: { message?: string };
   } & T;
   if (!res.ok) {
+    if (res.status === 405) {
+      throw new Error(
+        'HTTP 405: requests are hitting the website, not the API. Set VITE_API_URL to your ms-global-server project URL (where GET /health returns JSON), then redeploy.'
+      );
+    }
     throw new Error(data.error?.message ?? res.statusText ?? 'Request failed');
   }
   return data;

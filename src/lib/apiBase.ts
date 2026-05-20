@@ -3,6 +3,7 @@ function normalizeApiBase(raw: string): string {
   if (base.endsWith('/health')) {
     base = base.slice(0, -'/health'.length).replace(/\/$/, '');
   }
+  if (!/^https?:\/\//i.test(base)) return '';
   return base;
 }
 
@@ -47,5 +48,16 @@ export function apiBaseConfigured(): boolean {
 }
 
 export function missingApiBaseMessage(): string {
-  return 'API URL is not configured. Set VITE_API_URL on Vercel (shop + studio) to your ms-global-server URL.';
+  return 'Set VITE_API_URL to your API host (ms-global-server on Vercel), e.g. https://ms-global-server.vercel.app — not the shop or studio URL.';
+}
+
+/** True if API URL looks like a static frontend deploy (common misconfiguration). */
+export function apiBaseLooksLikeFrontend(): boolean {
+  const base = getApiBase().toLowerCase();
+  if (!base) return false;
+  return (
+    base.includes('ms-global-zeta') ||
+    base.includes('ms-global-admin-panel') ||
+    base.includes('ms-global-admin-pannel')
+  );
 }
